@@ -66,3 +66,29 @@ export const handleDeleteEmployee = async (employeeData: any) => {
         }
     }
 };
+
+export const handleDepartmentAdd = async (department: any) => {
+    try {
+        const response = await axios.post(`${API_URL}/api/departments/`, department);
+        return response.data;
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error(error.response.data);
+        } else {
+            throw new Error(error.message);
+        }
+    }
+};
+
+export const fetchDepartments = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/api/departments/`);
+        return response.data;
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error(error.response.data);
+        } else {
+            throw new Error(error.message);
+        }
+    }
+};
