@@ -23,7 +23,10 @@ interface EmployeeTableProps {
         name: string;
         gender: string;
         birth_date: Date;
-        department: string;
+        department: {
+            id: number;
+            department_name: string;
+        };
         joined_date: Date;
         termination_date: Date | null;
     }>;
@@ -60,7 +63,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ className, employees, onS
                                 <TableCell>{employee.name}</TableCell>
                                 <TableCell>{employee.gender}</TableCell>
                                 <TableCell>{new Date(employee.birth_date).toLocaleDateString()}</TableCell>
-                                <TableCell>{employee.department}</TableCell>
+                                <TableCell>{employee.department.department_name}</TableCell>
                                 <TableCell>{new Date(employee.joined_date).toLocaleDateString()}</TableCell>
                                 <TableCell>{employee.termination_date ? new Date(employee.termination_date).toLocaleDateString() : '-'}</TableCell>
                                 <TableCell>

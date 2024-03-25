@@ -39,13 +39,24 @@ const Sidebar: React.FC = () => {
                 </ListItem>
                 <ListItem
                     component={textStyled}
-                    to="/add"
+                    to="/add_employee"
                 >
                     <ListItemIcon>
                         <AddBoxIcon />
                     </ListItemIcon>
                     <ListItemText 
-                        primary="ADD" 
+                        primary="Add Employee" 
+                    />
+                </ListItem>
+                <ListItem
+                    component={textStyled}
+                    to="/add_department"
+                >
+                    <ListItemIcon>
+                        <AddBoxIcon />
+                    </ListItemIcon>
+                    <ListItemText 
+                        primary="Add Department" 
                     />
                 </ListItem>
             </List>
