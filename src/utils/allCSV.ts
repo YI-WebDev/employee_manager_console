@@ -3,7 +3,10 @@ export interface Employee {
     name: string;
     gender: string;
     birth_date: Date;
-    department: string;
+    department: {
+        id: number;
+        department_name: string;
+    };
     joined_date: Date;
     termination_date: Date | null;
 }
@@ -13,7 +16,7 @@ export const headersMapping = {
     name: 'Name',
     gender: 'Gender',
     birth_date: 'Birth Date',
-    department: 'Department',
+    'department.department_name': 'Department',
     joined_date: 'Joined Date',
     termination_date: 'Termination Date',
 };
@@ -34,10 +37,13 @@ function convertToCSV(data: Employee[]): string {
     if (data.length === 0) {
         return '';
     }
-    const headers = Object.keys(data[0]) as Array<keyof Employee>;
+    const headers = Object.keys(headersMapping) as Array<keyof typeof headersMapping>;
     const translatedHeaders = headers.map(header => headersMapping[header]);
     const csvRows = data.map(row =>
-        headers.map(fieldName => escapeForCSV(row[fieldName])).join(',')
+        headers.map(fieldName => {
+            const value = fieldName.split('.').reduce((obj, key) => obj && obj[key], row as any);
+            return escapeForCSV(value);
+        }).join(',')
     );
     return [translatedHeaders.join(','), ...csvRows].join('\r\n');
 }
