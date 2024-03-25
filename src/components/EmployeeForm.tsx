@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -11,14 +11,17 @@ import {
     Typography
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { handleEmployeeAdd } from '../services/api';
+import { fetchDepartments, handleEmployeeAdd } from '../services/api';
 
 interface Employee {
     id: number;
     name: string;
     gender: string;
     birth_date: Date;
-    department: string;
+    department: {
+        id: number;
+        department_name: string;
+    };
     joined_date: Date;
     termination_date: Date | null;
 }
@@ -34,20 +37,37 @@ const EmployeeForm: React.FC<Props> = ({ onEmployeeAdd }) => {
         name: '',
         gender: '',
         birth_date: new Date(),
-        department: '',
+        department: {
+            id: 0,
+            department_name: ""
+        },
         joined_date: new Date(),
         termination_date: null,
     });
+    const [departments, setDepartments] = useState<Array<{ id: number; department_name: string }>>([]);
     const requiredFields = ['name', 'gender', 'birth_date', 'department', 'joined_date'];
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchDepartments().then(setDepartments);
+    }, []);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmployee({ ...employee, [event.target.name]: event.target.value });
     };
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        setEmployee({ ...employee, [event.target.name as keyof typeof employee]: event.target.value });
+        if (event.target.name === 'department') {
+            const selectedDepartment = departments.find(
+                (department) => department.id === Number(event.target.value)
+            );
+            setEmployee((prev) => ({
+                ...prev,
+                department: selectedDepartment || { id: 0, department_name: '' },
+            }));
+        } else {
+            setEmployee({ ...employee, [event.target.name as keyof typeof employee]: event.target.value });
+        }
     };
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,9 +84,13 @@ const EmployeeForm: React.FC<Props> = ({ onEmployeeAdd }) => {
         event.preventDefault();
         setError('');
         try {
-            const addedEmployee = await handleEmployeeAdd(employee);
+            const addedEmployee = await handleEmployeeAdd({
+                ...employee,
+                department: employee.department.id,
+            });
             onEmployeeAdd(addedEmployee);
             navigate('/');
+            window.location.reload();
         } catch (error: any) {
             if (error.response && error.response.data) {
                 const errors = error.response.data;
@@ -76,6 +100,7 @@ const EmployeeForm: React.FC<Props> = ({ onEmployeeAdd }) => {
                     || 'There are required fields that are not filled.';
                 setError(errorMessage);
             } else {
+                console.log(error);
                 setError('Failed to update.');
             }
         }
@@ -124,13 +149,15 @@ const EmployeeForm: React.FC<Props> = ({ onEmployeeAdd }) => {
                 <Select
                     labelId="department-label"
                     name="department"
-                    value={employee.department}
+                    value={employee.department.id.toString()}
                     onChange={handleSelectChange}
                     error={!!error}
                 >
-                    <MenuItem value="Dev">Dev</MenuItem>
-                    <MenuItem value="Prod">Prod</MenuItem>
-                    <MenuItem value="Ope">Ope</MenuItem>
+                    {departments.map((department) => (
+                        <MenuItem key={department.id} value={department.id}>
+                            {department.department_name}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
             <TextField

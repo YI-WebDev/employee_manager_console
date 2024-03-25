@@ -10,6 +10,7 @@ import { Button, CssBaseline, Box, Container, Typography, Drawer } from '@mui/ma
 import downloadCSV from '../utils/csv';
 import downloadAllCSV from '../utils/allCSV';
 import { MdOutlineFileDownload } from "react-icons/md";
+import DepartmentForm from './DepartmentForm';
 
 const drawerWidth = 200;
 
@@ -18,7 +19,10 @@ type Employee = {
     name: string;
     gender: string;
     birth_date: Date;
-    department: string;
+    department: {
+        id: number;
+        department_name: string;
+    };
     joined_date: Date;
     termination_date: Date | null;
 };
@@ -28,7 +32,17 @@ const Main: React.FC = () => {
     const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<Set<number>>(new Set());
 
     useEffect(() => {
-        fetchEmployees().then(setEmployees);
+        fetchEmployees().then(data => {
+            const employeesWithDepartmentName = data.map((employee: any) => ({
+                ...employee,
+                department: {
+                    id: employee.department,
+                    department_name: employee.department_name
+                }
+            }));
+
+            setEmployees(employeesWithDepartmentName);
+        });
     }, []);
 
     const handleSelectEmployee = (employeeId: number, isSelected: boolean) => {
@@ -64,7 +78,7 @@ const Main: React.FC = () => {
     const handleEmployeeAdd = (newEmployee: Employee) => {
         setEmployees([...employees, newEmployee]);
     };
-
+    
     return (
         <Router>
             <CssBaseline />
@@ -83,7 +97,8 @@ const Main: React.FC = () => {
                     <Routes>
                         <Route path="/delete/:id" element={<EmployeeDelete onDelete={handleEmployeeDelete} />} />
                         <Route path="/edit/:id" element={<EmployeeEdit onEmployeeUpdate={handleEmployeeUpdate} />} />
-                        <Route path="/add" element={<EmployeeForm onEmployeeAdd={handleEmployeeAdd} />} />
+                        <Route path="/add_employee" element={<EmployeeForm onEmployeeAdd={handleEmployeeAdd} />} />
+                        <Route path="/add_department" element={<DepartmentForm />} />
                         <Route path="/" element={
                             <div>
                                 <Typography variant="h4" sx={{ my: 4 }}>
