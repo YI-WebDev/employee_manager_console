@@ -11,14 +11,17 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import { fetchEmployee, handleEmployeeUpdate } from '../services/api';
+import { fetchDepartments, fetchEmployee, handleEmployeeUpdate } from '../services/api';
 
 interface Employee {
     id: number;
     name: string;
     gender: string;
     birth_date: Date;
-    department: string;
+    department: {
+        id: number;
+        department_name: string;
+    };
     joined_date: Date;
     termination_date: Date | null;
 }
@@ -36,11 +39,19 @@ const EmployeeEdit: React.FC<EmployeeEditProps> = ({ onEmployeeUpdate }) => {
         name: '',
         gender: '',
         birth_date: new Date(),
-        department: '',
+        department: {
+            id: 0,
+            department_name: "",
+        },
         joined_date: new Date(),
         termination_date: null,
     });
     const requiredFields = ['name', 'gender', 'birth_date', 'department', 'joined_date'];
+    const [departments, setDepartments] = useState<Array<{ id: number; department_name: string }>>([]);
+
+    useEffect(() => {
+        fetchDepartments().then(setDepartments);
+    }, []);
 
     useEffect(() => {
         if (id) {
@@ -50,6 +61,7 @@ const EmployeeEdit: React.FC<EmployeeEditProps> = ({ onEmployeeUpdate }) => {
                     birth_date: new Date(data.birth_date),
                     joined_date: new Date(data.joined_date),
                     termination_date: data.termination_date ? new Date(data.termination_date) : null,
+                    department: data.department.department_name,
                 });
             });
         }
@@ -138,13 +150,15 @@ const EmployeeEdit: React.FC<EmployeeEditProps> = ({ onEmployeeUpdate }) => {
                 <Select
                     labelId="department-label"
                     name="department"
-                    value={employee.department}
+                    value={employee.department.department_name}
                     onChange={handleSelectChange}
                     error={!!error}
                 >
-                    <MenuItem value="Dev">Dev</MenuItem>
-                    <MenuItem value="Prod">Prod</MenuItem>
-                    <MenuItem value="Ope">Ope</MenuItem>
+                    {departments.map((department) => (
+                        <MenuItem key={department.id} value={department.id}>
+                            {department.department_name}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
             <TextField
