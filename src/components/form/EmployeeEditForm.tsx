@@ -61,7 +61,7 @@ const EmployeeEdit: React.FC<EmployeeEditProps> = ({ onEmployeeUpdate }) => {
                     birth_date: new Date(data.birth_date),
                     joined_date: new Date(data.joined_date),
                     termination_date: data.termination_date ? new Date(data.termination_date) : null,
-                    department: data.department.department_name,
+                    department: data.department,
                 });
             });
         }
