@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { handleDepartmentAdd } from '../services/api';
+import { handleDepartmentAdd } from '../api/api';
 
 const DepartmentForm: React.FC = () => {
     const [department_name, setName] = useState('');
@@ -18,7 +18,7 @@ const DepartmentForm: React.FC = () => {
             if (error.response && error.response.data) {
                 setError(error.response.data.name);
             } else {
-                setError('追加に失敗しました。');
+                setError('Failed to add department');
             }
             console.log(department_name);
         }
@@ -26,10 +26,10 @@ const DepartmentForm: React.FC = () => {
 
     return (
         <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <Typography color="primary" variant="h4">部署追加フォーム</Typography>
+            <Typography color="primary" variant="h4">Add Department</Typography>
             <TextField
                 name="department_name"
-                label="部署名"
+                label="Department Name"
                 value={department_name}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
@@ -42,7 +42,7 @@ const DepartmentForm: React.FC = () => {
                 </Typography>
             )}
             <Button type="submit" variant="contained" color="primary">
-                追加
+                Add
             </Button>
         </Box>
     );

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import EmployeeForm from './EmployeeForm';
-import EmployeeEdit from './EmployeeEdit';
-import EmployeeDelete from './EmployeeDelete';
-import EmployeeTable from './EmployeeTable';
-import { fetchEmployees } from '../services/api';
+import EmployeeForm from '../form/EmployeeCreateForm';
+import EmployeeEdit from '../form/EmployeeEditForm';
+import EmployeeDelete from '../form/EmployeeDelete';
+import EmployeeTable from '../list/EmployeeList';
+import { fetchEmployees } from '../api/api';
 import Sidebar from './Sidebar';
 import { Button, CssBaseline, Box, Container, Typography, Drawer } from '@mui/material';
 import downloadCSV from '../utils/csv';
 import downloadAllCSV from '../utils/allCSV';
 import { MdOutlineFileDownload } from "react-icons/md";
-import DepartmentForm from './DepartmentForm';
+import DepartmentForm from '../form/DepartmentCreateForm';
 
 const drawerWidth = 200;
 
@@ -78,7 +78,7 @@ const Main: React.FC = () => {
     const handleEmployeeAdd = (newEmployee: Employee) => {
         setEmployees([...employees, newEmployee]);
     };
-    
+
     return (
         <Router>
             <CssBaseline />

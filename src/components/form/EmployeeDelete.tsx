@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Modal from './Modal';
-import { fetchEmployee, handleDeleteEmployee } from '../services/api';
+import Modal from '../common/Modal';
+import { fetchEmployee, handleDeleteEmployee } from '../api/api';
 
 interface Employee {
     id: string;

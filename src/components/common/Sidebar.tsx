@@ -5,8 +5,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import {textStyled} from '../style/SidebarStyles';
-import {Box} from '@mui/material';
+import { textStyled } from '../style/SidebarStyles';
+import { Box } from '@mui/material';
 import sidebarImage from '../img/TitleLogo.png'
 
 const Sidebar: React.FC = () => {
@@ -33,8 +33,8 @@ const Sidebar: React.FC = () => {
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>
-                    <ListItemText 
-                        primary="HOME" 
+                    <ListItemText
+                        primary="HOME"
                     />
                 </ListItem>
                 <ListItem
@@ -44,8 +44,8 @@ const Sidebar: React.FC = () => {
                     <ListItemIcon>
                         <AddBoxIcon />
                     </ListItemIcon>
-                    <ListItemText 
-                        primary="Add Employee" 
+                    <ListItemText
+                        primary="Add Employee"
                     />
                 </ListItem>
                 <ListItem
@@ -55,8 +55,8 @@ const Sidebar: React.FC = () => {
                     <ListItemIcon>
                         <AddBoxIcon />
                     </ListItemIcon>
-                    <ListItemText 
-                        primary="Add Department" 
+                    <ListItemText
+                        primary="Add Department"
                     />
                 </ListItem>
             </List>
